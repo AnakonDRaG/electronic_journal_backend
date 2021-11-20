@@ -1,5 +1,6 @@
 ﻿using ElectronicJournal.Data.Repositorie.Interfaces;
 using ElectronicJournal.Domain;
+using ElectronicJournal.Services.StudentsService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,26 +18,38 @@ namespace ElectronicJournal.Controllers
     {
         private IRepository<Subject> _subjects;
         private IRepository<User> _users;
+        private readonly IStudentService _studentService;
+
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        public SubjController(IRepository<Subject> subjects, IRepository<User> users)
+        public SubjController(IRepository<Subject> subjects, IRepository<User> users, IStudentService studentService)
         {
             _subjects = subjects;
             _users = users;
+            _studentService = studentService;
         }
 
         [HttpGet]
-        [Authorize]
         public IEnumerable<Subject> GetAll()
         {
             return _subjects.GetAll();
         }
 
         [HttpGet]
-        [Route("id")]
-        public int GetId()
+        [Authorize(Roles ="Student")]
+        [Route("get/student/subjects")]
+        public IEnumerable<Subject> GetSubjectForStudent()
         {
-            return UserId;
+            var student = _studentService.GetStudentByUserId(UserId);
+            return _subjects.GetSome(s=> s.SubjectsInJournal.Any(sj => sj.Journal.Class.Id == student.ClassId));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher")]
+        [Route("get/teachers/subjects")]
+        public IEnumerable<Subject> GetSubjectForTeacher()
+        {
+            return _subjects.GetAll();
         }
 
         [HttpGet]
@@ -45,14 +58,5 @@ namespace ElectronicJournal.Controllers
         {
             return _subjects.GetOneOrDefoult(s => s.Name == titlr);
         }
-
-        [HttpGet]
-        [Route("get/user")]
-        public User GetOneUser([FromQuery] string titlr)
-        {
-            return _users.GetOneOrDefoult(s => s.Password == titlr);
-        }
-
-
     }
 }

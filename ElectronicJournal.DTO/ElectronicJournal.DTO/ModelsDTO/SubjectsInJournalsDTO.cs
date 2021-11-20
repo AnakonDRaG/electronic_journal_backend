@@ -1,4 +1,5 @@
 using ElectronicJournal.DTO.ModelsDTO.Base;
+using System.Collections.Generic;
 
 namespace ElectronicJournal.DTO.ModelsDTO
 {
@@ -7,5 +8,6 @@ namespace ElectronicJournal.DTO.ModelsDTO
         public TeachersDTO Teacher { get; set; }
         public SubjectsDTO Subject { get; set; }
         public JournalsDTO Journal { get; set; }
+        public IList<LessonsDTO> Lessons { get; set; }
     }
 }

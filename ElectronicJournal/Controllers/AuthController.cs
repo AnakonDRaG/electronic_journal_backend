@@ -1,40 +1,40 @@
-﻿using ElectronicJournal.Common;
+﻿using AutoMapper;
 using ElectronicJournal.Data.Repositorie.Interfaces;
 using ElectronicJournal.Domain;
+using ElectronicJournal.DTO.ModelsDTO;
+using ElectronicJournal.Services.JwtService.Interfaces;
+using ElectronicJournal.Services.StudentsService;
 using ElectronicJournal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ElectronicJournal.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     public class AuthController : ControllerBase
     {
         private IRepository<User> _users;
-        private readonly IOptions<AuthOptions> _options;
+        private readonly IJwtService _jwtService;
+        private readonly IMapper _mapper;
+        private readonly IStudentService _studentService;
 
-        public AuthController(IRepository<User> users, IOptions<AuthOptions> options)
+        public AuthController(IRepository<User> users, IJwtService jwtService, IMapper mapper, IStudentService studentService )
         {
             _users = users;
-           _options = options;
+            _jwtService = jwtService;
+            _mapper = mapper;
+            _studentService = studentService;
         }
 
         [HttpPost]
+        [Route("login")]
         public IActionResult Login([FromBody] LoginModel request)
         {
-            var user = AuthenticateUser(request.Login, request.Password);
+            var user = _users.GetOneOrDefoult(u => u.Password == request.Password && u.UserName == request.Login);
 
             if (user != null)
             {
-                var token = GenerateJWT(user);
+                var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
                 return Ok(new { acces_token = token });
             }
@@ -42,33 +42,27 @@ namespace ElectronicJournal.Controllers
             return Unauthorized();
         }
 
-        private User AuthenticateUser(string login, string password)
+        [HttpPost]
+        [Route("create")]
+        public IActionResult CreateUser([FromBody] RegisterModel request)
         {
-            var user = _users.GetOneOrDefoult(u => u.Password == password && u.UserName == login);
-            return user;
+            var user = _users.GetOneOrDefoult(u => u.UserName == request.Login);
+
+            if (user != null)
+                return Unauthorized("User with same login exist yet");
+
+            var human = _mapper.Map<Human>(request.Human);
+           // _studentService.AddStudent(human);
+
+            user = new User { Password = request.Password, UserName = request.Login, Role = request.Role,Human = human };
+
+            _users.Add(user);
+            _users.SaveChanges();
+
+            var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
+
+            return Ok(new { acces_token = token });
         }
 
-        private string GenerateJWT(User user)
-        {
-            var authParams = _options.Value;
-
-            var securutyKey = authParams.GetSymmetricSecurityKey();
-            var credentials = new SigningCredentials(securutyKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new List<Claim>()
-            {
-                new Claim(JwtRegisteredClaimNames.Email, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
-            };
-
-            claims.Add(new Claim("role", user.Role.ToString()));
-
-            var token = new JwtSecurityToken(authParams.Issuer, authParams.Audience,claims,
-                expires: DateTime.Now.AddSeconds(authParams.LifeTime),
-                signingCredentials : credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-        
     }
 }

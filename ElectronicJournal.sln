@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicJournal.Data", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicJournal.Domain", "ElectronicJournal.Domain\ElectronicJournal.Domain.csproj", "{0B27C623-6372-46EC-9871-D756BF4053CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicJournal.Common", "ElectronicJournal.Common\ElectronicJournal.Common.csproj", "{3AE895D4-EB55-422A-9C9B-0F8FA70B6D9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicJournal.Common", "ElectronicJournal.Common\ElectronicJournal.Common.csproj", "{3AE895D4-EB55-422A-9C9B-0F8FA70B6D9C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicJournal.DTO", "ElectronicJournal.DTO\ElectronicJournal.DTO\ElectronicJournal.DTO.csproj", "{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3AE895D4-EB55-422A-9C9B-0F8FA70B6D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AE895D4-EB55-422A-9C9B-0F8FA70B6D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AE895D4-EB55-422A-9C9B-0F8FA70B6D9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

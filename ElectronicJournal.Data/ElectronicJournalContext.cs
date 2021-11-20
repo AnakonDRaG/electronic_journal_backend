@@ -19,7 +19,7 @@ namespace ElectronicJournal.Data
         public ElectronicJournalContext(DbContextOptions<ElectronicJournalContext> options)
             : base(options)
         {
-           // Database.EnsureCreated();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -18,6 +18,7 @@
     <ProjectReference Include="..\ElectronicJournal.Common\ElectronicJournal.Common.csproj" />
     <ProjectReference Include="..\ElectronicJournal.Data\ElectronicJournal.Data.csproj" />
     <ProjectReference Include="..\ElectronicJournal.Domain\ElectronicJournal.Domain.csproj" />
+    <ProjectReference Include="..\ElectronicJournal.DTO\ElectronicJournal.DTO\ElectronicJournal.DTO.csproj" />
   </ItemGroup>
 
 </Project>

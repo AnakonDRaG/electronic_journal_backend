@@ -69,9 +69,6 @@ namespace ElectronicJournal.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -115,6 +112,9 @@ namespace ElectronicJournal.Data.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("HomeTask")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SubjectInJournalId")
                         .HasColumnType("int");

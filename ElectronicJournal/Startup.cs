@@ -1,8 +1,13 @@
+using AutoMapper;
 using ElectronicJournal.Common;
 using ElectronicJournal.Data;
 using ElectronicJournal.Data.Repositorie;
 using ElectronicJournal.Data.Repositorie.Interfaces;
 using ElectronicJournal.Domain;
+using ElectronicJournal.DTO;
+using ElectronicJournal.Services.JwtService;
+using ElectronicJournal.Services.JwtService.Interfaces;
+using ElectronicJournal.Services.StudentsService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,49 +31,40 @@ namespace ElectronicJournal
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("DefaultConnection");
-            var authCongiguration = Configuration.GetSection("Auth");
-
-            services.AddDbContext<DbContext, ElectronicJournalContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<DbContext, ElectronicJournalContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IRepository<User>, BaseRepository<User>>();
             services.AddTransient<IRepository<Subject>, BaseRepository<Subject>>();
+            services.AddTransient<IRepository<Student>, BaseRepository<Student>>();
+            services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<IJwtService, JwtService>();
 
-            services.Configure<AuthOptions>(authCongiguration);
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                    });
-            });
+            services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
+            services.AddAutoMapper(typeof(MappingEntities));
+
             var authOptions = Configuration.GetSection("Auth").Get<AuthOptions>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
-                        options.RequireHttpsMetadata = false;
+                        options.RequireHttpsMetadata = true;
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            // укзывает, будет ли валидироваться издатель при валидации токена
                             ValidateIssuer = true,
                             ValidIssuer = authOptions.Issuer,
-
-                            // будет ли валидироваться потребитель токена
                             ValidateAudience = true,
                             ValidAudience = authOptions.Audience,
 
                             ValidateLifetime = true,
-
-                            // установка ключа безопасности
                             IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                             ValidateIssuerSigningKey = true,
                         };
                     });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                });
 
             services.AddSwaggerGen(c =>
             {
@@ -89,13 +85,11 @@ namespace ElectronicJournal
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-
-            app.UseAuthentication();
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseCors();
 
