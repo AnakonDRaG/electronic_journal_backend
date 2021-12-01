@@ -37,13 +37,18 @@ namespace ElectronicJournal
             services.AddTransient<IRepository<Student>, BaseRepository<Student>>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IJwtService, JwtService>();
+            services.AddCors();
 
             services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
             services.AddAutoMapper(typeof(MappingEntities));
 
             var authOptions = Configuration.GetSection("Auth").Get<AuthOptions>();
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+           
+            services.AddAuthentication((options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }))
                     .AddJwtBearer(options =>
                     {
                         options.RequireHttpsMetadata = true;
@@ -91,7 +96,9 @@ namespace ElectronicJournal
             app.UseAuthorization();
             app.UseAuthentication();
 
-            app.UseCors();
+            app.UseCors(x => x.AllowAnyOrigin()
+                             .AllowAnyMethod()
+                             .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {

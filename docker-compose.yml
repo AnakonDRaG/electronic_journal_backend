@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: electronic-journalDb
+    environment:
+        SA_PASSWORD: "Pass123!"
+        ACCEPT_EULA: "Y"
+ 
+  electronicjournal:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    image: electronicjournal
+    container_name: electronicjournalApi
+    ports:
+      - 8000:80
+    build:
+      context: .
+      dockerfile: ElectronicJournal/Dockerfile
+    depends_on:
+      - db
+    

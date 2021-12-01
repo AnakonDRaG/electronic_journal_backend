@@ -36,7 +36,7 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="Student")]
+        [Authorize]
         [Route("get/student/subjects")]
         public IEnumerable<Subject> GetSubjectForStudent()
         {

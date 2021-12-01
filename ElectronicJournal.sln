@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicJournal.Common", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicJournal.DTO", "ElectronicJournal.DTO\ElectronicJournal.DTO\ElectronicJournal.DTO.csproj", "{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{30BABD37-564F-440A-8C94-AB1AD3F6253F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{728E116B-49C9-4A7F-A10F-DDE6BB1BA17E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30BABD37-564F-440A-8C94-AB1AD3F6253F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30BABD37-564F-440A-8C94-AB1AD3F6253F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30BABD37-564F-440A-8C94-AB1AD3F6253F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30BABD37-564F-440A-8C94-AB1AD3F6253F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
