@@ -9,6 +9,6 @@ namespace ElectronicJournal.Domain
         public Class Class { get; set; }
         public int HumanId { get; set; }
         public Human Human { get; set; }
-        public IList<LessonScore> LessonsScores { get; set; }
+        public IList<LessonScore> LessonsScores { get; set; } = new List<LessonScore>();
     }
 }

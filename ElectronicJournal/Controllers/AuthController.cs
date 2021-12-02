@@ -6,6 +6,7 @@ using ElectronicJournal.Services.JwtService.Interfaces;
 using ElectronicJournal.Services.StudentsService;
 using ElectronicJournal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ElectronicJournal.Controllers
 {
@@ -17,6 +18,7 @@ namespace ElectronicJournal.Controllers
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
+        private IList<string> _roles = new List<string>() { "Student", "Teacher" };
 
         public AuthController(IRepository<User> users, IJwtService jwtService, IMapper mapper, IStudentService studentService )
         {
@@ -36,10 +38,10 @@ namespace ElectronicJournal.Controllers
             {
                 var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
-                return Ok(new { acces_token = token });
+                return Ok(new { access_token = token });
             }
 
-            return Unauthorized();
+            return BadRequest(new { error = "Authorization is not valid"});
         }
 
         [HttpPost]
@@ -51,17 +53,19 @@ namespace ElectronicJournal.Controllers
             if (user != null)
                 return Unauthorized("User with same login exist yet");
 
-            var human = _mapper.Map<Human>(request.Human);
-           // _studentService.AddStudent(human);
+            if(!_roles.Contains(request.Role))
+                return Unauthorized("Invalid role");
 
-            user = new User { Password = request.Password, UserName = request.Login, Role = request.Role,Human = human };
+            var human = _mapper.Map<Human>(request.Human);
+
+            user = new User { Password = request.Password, UserName = request.Login, Role = request.Role, Human = human };
 
             _users.Add(user);
             _users.SaveChanges();
 
             var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
-            return Ok(new { acces_token = token });
+            return Ok(new { access_token = token});
         }
 
     }

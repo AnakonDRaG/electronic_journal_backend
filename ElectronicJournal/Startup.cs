@@ -35,6 +35,9 @@ namespace ElectronicJournal
             services.AddTransient<IRepository<User>, BaseRepository<User>>();
             services.AddTransient<IRepository<Subject>, BaseRepository<Subject>>();
             services.AddTransient<IRepository<Student>, BaseRepository<Student>>();
+            services.AddTransient<IFullRepository<Human>, HumanRepository>();
+            services.AddTransient<IFullRepository<Lesson>, LessonsRepository>();
+            services.AddTransient<IFullRepository<Student>, StudentsRepository>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IJwtService, JwtService>();
             services.AddCors();

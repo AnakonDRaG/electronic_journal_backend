@@ -13,7 +13,7 @@ namespace ElectronicJournal.DTO
     {
         public MappingEntities()
         {
-           // MapEntityToDTO();
+            MapEntityToDTO();
             //MapDtoToEntity();
             CreateMap<HumanAddDto, Human>()
                .ForMember(x => x.Name, opt => opt.MapFrom(y => y.FirstName))
@@ -25,7 +25,7 @@ namespace ElectronicJournal.DTO
             CreateMap<User, UsersDTO>();
             CreateMap<Human, HumansDTO>()
                 .ForMember(humanDto => humanDto.FirstName, opt => opt.MapFrom(human => human.Name))
-                .ForMember(humanDto => humanDto.User, opt => opt.MapFrom(human => human.User));
+                .ForMember(humanDto => humanDto.UserName, opt => opt.MapFrom(human => human.User.UserName));
             CreateMap<Class, ClassesDTO>()
                 .ForMember(classDto => classDto.Journal, opt => opt.MapFrom(c => c.CurrentJournal));
             CreateMap<Journal, JournalsDTO>()
@@ -42,7 +42,8 @@ namespace ElectronicJournal.DTO
               .ForMember(entityDto => entityDto.LastName, opt => opt.MapFrom(e => e.Human.LastName))
               .ForMember(entityDto => entityDto.Id, opt => opt.MapFrom(e => e.Human.Id))
               .ForMember(entityDto => entityDto.BirthDate, opt => opt.MapFrom(e => e.Human.BirthDate));
-            CreateMap<Lesson, LessonsDTO>();
+            CreateMap<Lesson, LessonsDTO>()
+                .ForMember(entityDto => entityDto.LessonScores, opt => opt.MapFrom(e => e.LessonScores.Select(l=>l.Score).ToList()));
             CreateMap<LessonScore, LessonScoresDTO>();
         }
         private void MapDtoToEntity()
