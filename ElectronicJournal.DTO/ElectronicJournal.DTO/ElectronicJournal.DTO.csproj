@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\ElectronicJournal.Data\ElectronicJournal.Data.csproj" />
       <ProjectReference Include="..\..\ElectronicJournal.Domain\ElectronicJournal.Domain.csproj" />
     </ItemGroup>
 

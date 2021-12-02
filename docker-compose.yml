@@ -20,4 +20,3 @@ services:
       dockerfile: ElectronicJournal/Dockerfile
     depends_on:
       - db
-    
