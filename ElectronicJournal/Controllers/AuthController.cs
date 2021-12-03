@@ -37,11 +37,19 @@ namespace ElectronicJournal.Controllers
 
             if (user != null)
             {
+                if (user.Password != request.Password)
+                    return BadRequest(new
+                        {
+                            errors = new
+                            {
+                                password = "Invalid password"
+                            }
+                        });
+
                 var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
                 return Ok(new {accessToken = token});
             }
-
 
             return BadRequest(new {message = "Authorization is not valid"});
         }
@@ -73,7 +81,7 @@ namespace ElectronicJournal.Controllers
 
             var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
-            return Ok(new { access_token = token});
+            return Ok(new {access_token = token});
         }
     }
 }
