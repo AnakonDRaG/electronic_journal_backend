@@ -23,7 +23,7 @@ namespace ElectronicJournal.Services.StudentsService
 
         public Student GetStudentByUserId(int id)
         {
-            return _repository.GetOneOrDefoult(s => s.Human.UserId == id); 
+            return _repository.GetOneOrDefault(s => s.Human.UserId == id); 
         }
     }
 }

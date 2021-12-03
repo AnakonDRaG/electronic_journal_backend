@@ -29,15 +29,14 @@ namespace ElectronicJournal.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("home")]
-        public HumansDTO Home()
+        public HumansDTO Get()
         {
             var human = _humans.GetOneWithObjects(h => h.User.Id == UserId);
             return _mapper.Map<HumansDTO>(human);
         }
 
         [HttpGet]
-        [Route("getAll")]
+        [Route("all")]
         public IEnumerable<HumansDTO> GetAllHumans()
         {
             var humans = _humans.GetAllWithObjects();

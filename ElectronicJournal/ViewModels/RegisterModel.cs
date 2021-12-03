@@ -10,7 +10,7 @@ namespace ElectronicJournal.ViewModels
     public class RegisterModel : LoginModel
     {
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Пароль введен неверно")]
+        [Compare("Password", ErrorMessage = "Passwords don't match")]
         public string ConfirmPassword { get; set; }
 
         [Required]

@@ -22,8 +22,8 @@ namespace ElectronicJournal.Services.JwtService
         {
             var authParams = _options.Value;
 
-            var securutyKey = authParams.GetSymmetricSecurityKey();
-            var credentials = new SigningCredentials(securutyKey, SecurityAlgorithms.HmacSha256);
+            var securityKey = authParams.GetSymmetricSecurityKey();
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>()
             {

@@ -18,9 +18,10 @@ namespace ElectronicJournal.Controllers
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
-        private IList<string> _roles = new List<string>() { "Student", "Teacher" };
+        private IList<string> _roles = new List<string>() {"student", "teacher"};
 
-        public AuthController(IRepository<User> users, IJwtService jwtService, IMapper mapper, IStudentService studentService )
+        public AuthController(IRepository<User> users, IJwtService jwtService, IMapper mapper,
+            IStudentService studentService)
         {
             _users = users;
             _jwtService = jwtService;
@@ -32,33 +33,40 @@ namespace ElectronicJournal.Controllers
         [Route("login")]
         public IActionResult Login([FromBody] LoginModel request)
         {
-            var user = _users.GetOneOrDefoult(u => u.Password == request.Password && u.UserName == request.Login);
+            var user = _users.GetOneOrDefault(user => user.UserName == request.Login);
 
             if (user != null)
             {
                 var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
-                return Ok(new { access_token = token });
+                return Ok(new {accessToken = token});
             }
 
-            return BadRequest(new { error = "Authorization is not valid"});
+
+            return BadRequest(new {message = "Authorization is not valid"});
         }
 
         [HttpPost]
-        [Route("create")]
+        [Route("registration")]
         public IActionResult CreateUser([FromBody] RegisterModel request)
         {
-            var user = _users.GetOneOrDefoult(u => u.UserName == request.Login);
+            var user = _users.GetOneOrDefault(u => u.UserName == request.Login);
 
             if (user != null)
-                return Unauthorized("User with same login exist yet");
+                return Forbid("This user already exists");
 
-            if(!_roles.Contains(request.Role))
-                return Unauthorized("Invalid role");
+            if (!_roles.Contains(request.Role))
+                return BadRequest(new {message = "Invalid role"});
 
             var human = _mapper.Map<Human>(request.Human);
 
-            user = new User { Password = request.Password, UserName = request.Login, Role = request.Role, Human = human };
+            user = new User
+            {
+                Password = request.Password,
+                UserName = request.Login,
+                Role = request.Role,
+                Human = human
+            };
 
             _users.Add(user);
             _users.SaveChanges();
@@ -67,6 +75,5 @@ namespace ElectronicJournal.Controllers
 
             return Ok(new { access_token = token});
         }
-
     }
 }

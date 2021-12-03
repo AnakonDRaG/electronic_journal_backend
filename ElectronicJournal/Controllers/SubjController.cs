@@ -37,7 +37,7 @@ namespace ElectronicJournal.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("get/student/subjects")]
+        [Route("student/subjects")]
         public IEnumerable<Subject> GetSubjectForStudent()
         {
             var student = _studentService.GetStudentByUserId(UserId);
@@ -46,17 +46,17 @@ namespace ElectronicJournal.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Teacher")]
-        [Route("get/teachers/subjects")]
+        [Route("teacher/subjects")]
         public IEnumerable<Subject> GetSubjectForTeacher()
         {
             return _subjects.GetAll();
         }
 
         [HttpGet]
-        [Route("get")]
+        [Route("getOne")]
         public Subject GetOne([FromQuery] string titlr)
         {
-            return _subjects.GetOneOrDefoult(s => s.Name == titlr);
+            return _subjects.GetOneOrDefault(s => s.Name == titlr);
         }
     }
 }

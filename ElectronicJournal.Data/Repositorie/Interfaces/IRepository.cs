@@ -27,7 +27,7 @@ namespace ElectronicJournal.Data.Repositorie.Interfaces
 
         IEnumerable<E> GetSome(Func<E, bool> where);
 
-        E GetOneOrDefoult(Func<E, bool> where);
+        E GetOneOrDefault(Func<E, bool> where);
 
         void SaveChanges();
 

@@ -17,7 +17,7 @@ namespace ElectronicJournal.Controllers
     public class ScheduleController : ControllerBase
     {
         private IFullRepository<Student> _students;
-        private IFullRepository<Lesson> _lessonss;
+        private IFullRepository<Lesson> _lessons;
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -27,12 +27,12 @@ namespace ElectronicJournal.Controllers
             _students = students;
             _mapper = mapper;
             _studentService = studentService;
-            _lessonss = lessonss;
+            _lessons = lessonss;
         }
 
         [HttpGet]
         [Authorize(Roles = "Student")]
-        [Route("/student/schedule")]
+        [Route("student/schedule")]
         public IEnumerable<StudyDayDto> Home(int weekCount)
         {
             var student = _students.GetOneWithObjects(s => s.Human.UserId == UserId);
@@ -41,10 +41,10 @@ namespace ElectronicJournal.Controllers
             var friday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday + weekCount * 7);
 
             var lessonsScores = student.LessonsScores.Where(l => l.Lesson.Date >= monday && l.Lesson.Date <= friday).Select(ls => ls.LessonId).ToArray();
-            var lessons = _lessonss.GetAllWithObjects(l => lessonsScores.Contains(l.Id));
+            var lessons = _lessons.GetAllWithObjects(l => lessonsScores.Contains(l.Id));
 
-            var LessonDto = lessons.Select(l => _mapper.Map<LessonsDTO>(l));
-            var studyDays = LessonDto.GroupBy(p => p.Date)
+            var lessonDto = lessons.Select(l => _mapper.Map<LessonsDTO>(l));
+            var studyDays = lessonDto.GroupBy(p => p.Date)
                         .Select(g => new StudyDayDto
                         {
                             Date = g.Key,

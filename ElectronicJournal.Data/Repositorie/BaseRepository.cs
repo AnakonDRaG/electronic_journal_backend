@@ -63,7 +63,7 @@ namespace ElectronicJournal.Data.Repositorie
         {
             return _context.Set<E>().Where(where);
         }
-        public E GetOneOrDefoult(Func<E, bool> where)
+        public E GetOneOrDefault(Func<E, bool> where)
         {
             var entity = _context.Set<E>().Where(where).FirstOrDefault();
             return entity;
