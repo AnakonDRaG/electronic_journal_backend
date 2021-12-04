@@ -30,10 +30,11 @@ namespace ElectronicJournal.DTO
                 .ForMember(humanDto => humanDto.Role, opt => opt.MapFrom(human => human.User.Role));
 
             CreateMap<Class, ClassesDTO>()
-                .ForMember(classDto => classDto.Journal, opt => opt.MapFrom(c => c.CurrentJournal));
+                .ForMember(classDto => classDto.JournalId, opt => opt.MapFrom(c => c.CurrentJournal.Id))
+                .ForMember(c => c.ClassroomTeacher, opt => opt.MapFrom(c => c.ClassroomTeacher));
 
             CreateMap<Class, ClassWithStudentDto>()
-                .ForMember(classDto => classDto.Journal, opt => opt.MapFrom(c => c.CurrentJournal))
+                .ForMember(classDto => classDto.JournalId, opt => opt.MapFrom(c => c.CurrentJournal.Id))
                 .ForMember(c => c.Students, opt => opt.MapFrom(d => d.Students));
 
             CreateMap<Journal, JournalsDTO>()
@@ -43,10 +44,8 @@ namespace ElectronicJournal.DTO
 
             CreateMap<Teacher, TeachersDTO>()
                 .ForMember(entityDto => entityDto.FirstName, opt => opt.MapFrom(e => e.Human.Name))
-                .ForMember(entityDto => entityDto.LastName, opt => opt.MapFrom(e => e.Human.LastName))
-                .ForMember(entityDto => entityDto.Id, opt => opt.MapFrom(e => e.Human.Id))
-                .ForMember(entityDto => entityDto.BirthDate, opt => opt.MapFrom(e => e.Human.BirthDate));
-
+                .ForMember(entityDto => entityDto.CurrentClass, opt => opt.MapFrom(e => e.CurrentClass));
+            
             CreateMap<Student, StudentsDTO>()
                 .ForMember(entityDto => entityDto.FirstName, opt => opt.MapFrom(e => e.Human.Name))
                 .ForMember(entityDto => entityDto.LastName, opt => opt.MapFrom(e => e.Human.LastName))

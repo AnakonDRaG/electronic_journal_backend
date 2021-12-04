@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElectronicJournal.DTO.ModelsDTO
 {
-    class ClassWithStudentDto : ClassesDTO
+    public class ClassWithStudentDto : ClassesDTO
     {
         public IList<StudentsDTO> Students { get; set; } = new List<StudentsDTO>();
     }

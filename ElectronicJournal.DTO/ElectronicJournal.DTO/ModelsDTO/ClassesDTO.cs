@@ -7,7 +7,7 @@ namespace ElectronicJournal.DTO.ModelsDTO
     {
         public TeachersDTO ClassroomTeacher { get; set; }
         public StudentsDTO Headman { get; set; }
-        public JournalsDTO Journal { get; set; }
+        public int JournalId{ get; set; }
         public string Name { get; set; }
     }
 }
