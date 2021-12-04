@@ -52,7 +52,7 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
         public ClassesDTO GetClassById(int id)
         {
             var searchClass = _classes.GetOne(id);
