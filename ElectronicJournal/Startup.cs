@@ -8,6 +8,7 @@ using ElectronicJournal.DTO;
 using ElectronicJournal.Services.JwtService;
 using ElectronicJournal.Services.JwtService.Interfaces;
 using ElectronicJournal.Services.StudentsService;
+using ElectronicJournal.Services.TeacherService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,10 +36,14 @@ namespace ElectronicJournal
             services.AddTransient<IRepository<User>, BaseRepository<User>>();
             services.AddTransient<IRepository<Subject>, BaseRepository<Subject>>();
             services.AddTransient<IRepository<Student>, BaseRepository<Student>>();
+            services.AddTransient<IRepository<Teacher>, BaseRepository<Teacher>>();
+            services.AddTransient<IRepository<Human>, BaseRepository<Human>>();
+            services.AddTransient<IRepository<Class>, BaseRepository<Class>>();
             services.AddTransient<IFullRepository<Human>, HumanRepository>();
             services.AddTransient<IFullRepository<Lesson>, LessonsRepository>();
             services.AddTransient<IFullRepository<Student>, StudentsRepository>();
             services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<ITeacherService, TeacherService>();
             services.AddTransient<IJwtService, JwtService>();
             services.AddCors();
 

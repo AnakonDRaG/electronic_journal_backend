@@ -26,22 +26,31 @@ namespace ElectronicJournal.DTO
             CreateMap<Human, HumansDTO>()
                 .ForMember(humanDto => humanDto.FirstName, opt => opt.MapFrom(human => human.Name))
                 .ForMember(humanDto => humanDto.UserName, opt => opt.MapFrom(human => human.User.UserName));
+
             CreateMap<Class, ClassesDTO>()
                 .ForMember(classDto => classDto.Journal, opt => opt.MapFrom(c => c.CurrentJournal));
+
+            CreateMap<Class, ClassWithStudentDto>()
+               .ForMember(classDto => classDto.Journal, opt => opt.MapFrom(c => c.CurrentJournal))
+               .ForMember(c => c.Students, opt => opt.MapFrom(d=> d.Students));
+
             CreateMap<Journal, JournalsDTO>()
                 .ForMember(entityDto => entityDto.Class, opt => opt.MapFrom(e => e.Class));
             CreateMap<SubjectInJournal, SubjectsInJournalsDTO>();
             CreateMap<Subject, SubjectsDTO>();
+
             CreateMap<Teacher, TeachersDTO>()
                 .ForMember(entityDto => entityDto.FirstName, opt => opt.MapFrom(e => e.Human.Name))
                 .ForMember(entityDto => entityDto.LastName, opt => opt.MapFrom(e => e.Human.LastName))
                 .ForMember(entityDto => entityDto.Id, opt => opt.MapFrom(e => e.Human.Id))
                 .ForMember(entityDto => entityDto.BirthDate, opt => opt.MapFrom(e => e.Human.BirthDate));
+
             CreateMap<Student, StudentsDTO>()
               .ForMember(entityDto => entityDto.FirstName, opt => opt.MapFrom(e => e.Human.Name))
               .ForMember(entityDto => entityDto.LastName, opt => opt.MapFrom(e => e.Human.LastName))
               .ForMember(entityDto => entityDto.Id, opt => opt.MapFrom(e => e.Human.Id))
               .ForMember(entityDto => entityDto.BirthDate, opt => opt.MapFrom(e => e.Human.BirthDate));
+
             CreateMap<Lesson, LessonsDTO>()
                 .ForMember(entityDto => entityDto.LessonScores, opt => opt.MapFrom(e => e.LessonScores.Select(l=>l.Score).ToList()));
             CreateMap<LessonScore, LessonScoresDTO>();

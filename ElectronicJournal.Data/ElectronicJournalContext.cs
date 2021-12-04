@@ -45,7 +45,8 @@ namespace ElectronicJournal.Data
 
             modelBuilder.Entity<Teacher>()
             .HasOne(t => t.CurrentClass)
-            .WithOne();
+            .WithOne(c => c.ClassroomTeacher)
+            .HasForeignKey<Class>(c => c.ClassroomTeacherId);
 
             modelBuilder.Entity<Student>()
             .HasOne(s => s.Class)
@@ -55,6 +56,15 @@ namespace ElectronicJournal.Data
             modelBuilder.Entity<Human>()
             .HasOne(h => h.User)
             .WithOne(u => u.Human);
+
+            modelBuilder.Entity<Class>()
+                .Property(c => c.HeadmanId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Student>()
+                .Property(c => c.ClassId)
+                .IsRequired(false);
+
         }
     }
 }

@@ -4,6 +4,7 @@ using ElectronicJournal.Domain;
 using ElectronicJournal.DTO.ModelsDTO;
 using ElectronicJournal.Services.JwtService.Interfaces;
 using ElectronicJournal.Services.StudentsService;
+using ElectronicJournal.Services.TeacherService;
 using ElectronicJournal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -18,15 +19,17 @@ namespace ElectronicJournal.Controllers
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
+        private readonly ITeacherService _teacherService;
         private IList<string> _roles = new List<string>() {"student", "teacher"};
 
         public AuthController(IRepository<User> users, IJwtService jwtService, IMapper mapper,
-            IStudentService studentService)
+            IStudentService studentService, ITeacherService teacherService)
         {
             _users = users;
             _jwtService = jwtService;
             _mapper = mapper;
             _studentService = studentService;
+            _teacherService = teacherService;
         }
 
         [HttpPost]
@@ -61,12 +64,17 @@ namespace ElectronicJournal.Controllers
             var user = _users.GetOneOrDefault(u => u.UserName == request.Login);
 
             if (user != null)
-                return Forbid("This user already exists");
+                return BadRequest("This user already exists");
 
             if (!_roles.Contains(request.Role))
                 return BadRequest(new {message = "Invalid role"});
 
             var human = _mapper.Map<Human>(request.Human);
+
+            if (request.Role == "student")
+                _studentService.AddStudent(human);
+            else
+                _teacherService.AddTeacher(human);
 
             user = new User
             {

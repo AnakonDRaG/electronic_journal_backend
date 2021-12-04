@@ -1,4 +1,5 @@
 using ElectronicJournal.DTO.ModelsDTO.Base;
+using System.Collections.Generic;
 
 namespace ElectronicJournal.DTO.ModelsDTO
 {

@@ -5,7 +5,7 @@ namespace ElectronicJournal.Domain
 {
     public class Student : BaseModel
     {
-        public int ClassId { get; set; }
+        public int? ClassId { get; set; }
         public Class Class { get; set; }
         public int HumanId { get; set; }
         public Human Human { get; set; }
