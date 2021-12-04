@@ -101,8 +101,9 @@ namespace ElectronicJournal
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+           
 
             app.UseCors(x => x.AllowAnyOrigin()
                              .AllowAnyMethod()

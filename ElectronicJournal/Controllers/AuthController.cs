@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ElectronicJournal.Data.Repositorie.Interfaces;
 using ElectronicJournal.Domain;
-using ElectronicJournal.DTO.ModelsDTO;
 using ElectronicJournal.Services.JwtService.Interfaces;
 using ElectronicJournal.Services.StudentsService;
 using ElectronicJournal.Services.TeacherService;
@@ -89,7 +88,7 @@ namespace ElectronicJournal.Controllers
 
             var token = _jwtService.GenerateJWT(user.UserName, user.Id.ToString(), user.Role);
 
-            return Ok(new {access_token = token});
+            return Ok(new {accessToken = token});
         }
     }
 }
