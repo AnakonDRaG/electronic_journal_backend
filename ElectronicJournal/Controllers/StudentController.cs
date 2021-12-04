@@ -30,7 +30,7 @@ namespace ElectronicJournal.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route("add/student/to-class")]
+        [Route("add/student/toClass")]
         public StudentsDTO AddToClass(int classId)
         {
             var student = _students.GetOneWithObjects(s => s.Human.UserId == UserId);

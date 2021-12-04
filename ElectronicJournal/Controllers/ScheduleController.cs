@@ -31,8 +31,8 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Student")]
-        [Route("student/schedule")]
+        [Authorize(Roles = "student")]
+        [Route("student")]
         public IEnumerable<StudyDayDto> Home(int weekCount)
         {
             var student = _students.GetOneWithObjects(s => s.Human.UserId == UserId);

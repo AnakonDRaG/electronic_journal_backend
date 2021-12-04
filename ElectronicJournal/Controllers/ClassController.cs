@@ -38,8 +38,8 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Teacher")]
-        [Route("add/class")]
+        //[Authorize(Roles = "teacher")]
+        [Route("create")]
         public ClassesDTO AddNewClass(CreateClassDto command)
         {
             var journal = new Journal() { DateStart = DateTime.UtcNow, DateEnd = DateTime.UtcNow.AddYears(1) };
@@ -52,7 +52,7 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpGet]
-        [Route("get/class/{id}")]
+        [Route("/{id}")]
         public ClassesDTO GetClassById(int id)
         {
             var searchClass = _classes.GetOne(id);

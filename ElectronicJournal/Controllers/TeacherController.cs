@@ -29,7 +29,7 @@ namespace ElectronicJournal.Controllers
 
         [HttpGet]
         //[Authorize]
-        [Route("get/teachers")]
+        [Route("getAll")]
         public IEnumerable<TeachersDTO> GetAll()
         {
             var teachers = _teachers.GetAll().ToList();

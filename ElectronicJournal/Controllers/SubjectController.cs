@@ -14,7 +14,7 @@ namespace ElectronicJournal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubjController : ControllerBase
+    public class SubjectController : ControllerBase
     {
         private IRepository<Subject> _subjects;
         private IRepository<User> _users;
@@ -22,7 +22,7 @@ namespace ElectronicJournal.Controllers
 
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        public SubjController(IRepository<Subject> subjects, IRepository<User> users, IStudentService studentService)
+        public SubjectController(IRepository<Subject> subjects, IRepository<User> users, IStudentService studentService)
         {
             _subjects = subjects;
             _users = users;
@@ -37,7 +37,7 @@ namespace ElectronicJournal.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("student/subjects")]
+        [Route("student")]
         public IEnumerable<Subject> GetSubjectForStudent()
         {
             var student = _studentService.GetStudentByUserId(UserId);
@@ -45,8 +45,8 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Teacher")]
-        [Route("teacher/subjects")]
+        [Authorize(Roles = "teacher")]
+        [Route("teacher")]
         public IEnumerable<Subject> GetSubjectForTeacher()
         {
             return _subjects.GetAll();
@@ -54,9 +54,9 @@ namespace ElectronicJournal.Controllers
 
         [HttpGet]
         [Route("getOne")]
-        public Subject GetOne([FromQuery] string titlr)
+        public Subject GetOne([FromQuery] string subjectName)
         {
-            return _subjects.GetOneOrDefault(s => s.Name == titlr);
+            return _subjects.GetOneOrDefault(s => s.Name == subjectName);
         }
     }
 }
