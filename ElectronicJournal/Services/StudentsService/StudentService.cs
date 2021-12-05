@@ -9,8 +9,8 @@ namespace ElectronicJournal.Services.StudentsService
 {
     public class StudentService : IStudentService
     {
-        private readonly IRepository<Student> _repository;
-        public StudentService(IRepository<Student> repository)
+        private readonly IFullRepository<Student> _repository;
+        public StudentService(IFullRepository<Student> repository)
         {
             _repository = repository;
         }
@@ -24,6 +24,15 @@ namespace ElectronicJournal.Services.StudentsService
         public Student GetStudentByUserId(int id)
         {
             return _repository.GetOneOrDefault(s => s.Human.UserId == id); 
+        }
+
+        public Student GetStudentById(int? id)
+        {
+            if (id is null)
+                return null;
+
+            var studentId = (int)id;
+            return _repository.GetOneWithObjects(studentId);
         }
     }
 }

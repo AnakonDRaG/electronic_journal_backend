@@ -31,7 +31,7 @@ namespace ElectronicJournal.Controllers
         [Route("getAll")]
         public IEnumerable<TeachersDTO> GetAll()
         {
-            var teachers = _teachers.GetAll().ToList();
+            var teachers = _teachers.GetAllWithObjects().ToList();
             return teachers.Select(t => _mapper.Map<TeachersDTO>(t));
         }
 

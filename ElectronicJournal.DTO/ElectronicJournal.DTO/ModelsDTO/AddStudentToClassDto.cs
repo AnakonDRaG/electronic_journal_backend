@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace ElectronicJournal.DTO.ModelsDTO
 {
-    public class ClassWithStudentDto : ClassesDTO
-    {
-        public IList<HumansDTO> Students { get; set; } = new List<HumansDTO>();
-    }
+    public record AddStudentToClassDto(int StudentId, int ClassId);
+   
 }

@@ -11,6 +11,7 @@ namespace ElectronicJournal.Services.StudentsService
         void AddStudent(Human human);
 
         Student GetStudentByUserId(int id);
-       
+
+        Student GetStudentById(int? id);
     }
 }

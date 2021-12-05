@@ -15,28 +15,32 @@ namespace ElectronicJournal.Data.Repositorie
 
         public IEnumerable<Student> GetAllWithObjects()
         {
-            /* var articles = _context.Set<Human>().AsNoTracking()
-                  .Include(a => a.Tags)
-                  .Include(a => a.Likes)
-                  .Include(a => a.Profile);*/
+            var student = _context.Set<Student>().AsNoTracking()
+             .Include(a => a.Human)
+             .Include(a => a.LessonsScores)
+             .ToList();
 
-            return null;
+            return student;
         }
 
         public IEnumerable<Student> GetAllWithObjects(Expression<Func<Student, bool>> where)
         {
-            throw new NotImplementedException();
+            var student = _context.Set<Student>().AsNoTracking().Where(where)
+              .Include(a => a.Human)
+              .Include(a => a.LessonsScores)
+              .ToList();
+
+            return student;
         }
 
         public Student GetOneWithObjects(int id)
         {
-            /*var article = _context.Set<Human>().AsNoTracking().Where(a => a.Id == id)
-                .Include(a => a.Tags)
-                .Include(a => a.Likes)
-                .Include(a => a.Profile)
-                .FirstOrDefault();*/
+            var student = _context.Set<Student>().AsNoTracking().Where(s => s.Id == id)
+               .Include(a => a.Human)
+               .Include(a => a.LessonsScores)
+               .FirstOrDefault();
 
-            return null;
+            return student;
         }
 
         public Student GetOneWithObjects(Expression<Func<Student, bool>> where)

@@ -5,8 +5,8 @@ namespace ElectronicJournal.DTO.ModelsDTO
 {
     public class ClassesDTO : EntityDTO
     {
-        public TeachersDTO ClassroomTeacher { get; set; }
-        public StudentsDTO Headman { get; set; }
+        public HumansDTO ClassroomTeacher { get; set; }
+        public HumansDTO Headman { get; set; }
         public int JournalId{ get; set; }
         public string Name { get; set; }
     }

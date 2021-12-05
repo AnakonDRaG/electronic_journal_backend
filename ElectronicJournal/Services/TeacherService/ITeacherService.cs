@@ -11,6 +11,7 @@ namespace ElectronicJournal.Services.TeacherService
         Teacher AddTeacher(Human human);
 
         Teacher GetTeacherByUserId(int id);
+        Teacher GetTeacherById(int id);
 
         Teacher AddTeacher(int humanId);
     }

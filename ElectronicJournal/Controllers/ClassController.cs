@@ -2,6 +2,7 @@
 using ElectronicJournal.Data.Repositorie.Interfaces;
 using ElectronicJournal.Domain;
 using ElectronicJournal.DTO.ModelsDTO;
+using ElectronicJournal.Services.StudentsService;
 using ElectronicJournal.Services.TeacherService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,18 @@ namespace ElectronicJournal.Controllers
     [ApiController]
     public class ClassController : ControllerBase
     {
-        private IRepository<Class> _classes;
+        private IFullRepository<Class> _classes;
         private readonly IMapper _mapper;
         private readonly ITeacherService _teacherService;
+        private readonly IStudentService _studentService;
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        public ClassController(IRepository<Class> classes, IMapper mapper, ITeacherService teacherService)
+        public ClassController(IFullRepository<Class> classes, IMapper mapper, ITeacherService teacherService, IStudentService studentService)
         {
             _classes = classes;
             _mapper = mapper;
             _teacherService = teacherService;
+            _studentService = studentService;
         }
 
         [HttpGet]
@@ -33,33 +36,47 @@ namespace ElectronicJournal.Controllers
         [Route("getAll")]
         public IEnumerable<ClassesDTO> Home()
         {
-            var human = _classes.GetAll();
-            return human.Select(h => _mapper.Map<ClassesDTO>(h));
+            var human = _classes.GetAllWithObjects().ToList();
+
+            return human.Select(h => {
+                h.ClassroomTeacher = _teacherService.GetTeacherById(h.ClassroomTeacherId);
+                h.Headman = _studentService.GetStudentById(h.HeadmanId);
+                return _mapper.Map<ClassesDTO>(h);
+            });
         }
 
         [HttpPost]
-        //[Authorize(Roles = "teacher")]
+        [Authorize(Roles = "teacher")]
         [Route("create")]
-        public ClassesDTO AddNewClass(CreateClassDto command)
+        public ClassWithTeacherDto AddNewClass(CreateClassDto command)
         {
-            var journal = new Journal() { DateStart = DateTime.UtcNow, DateEnd = DateTime.UtcNow.AddYears(1) };
-            var newClass = new Class() { ClassroomTeacherId = command.ClassroomTeacherId, Name = command.Name, CurrentJournal = journal };
+            var teacher = _teacherService.GetTeacherById(command.ClassroomTeacherId);
+            if (teacher is null)
+                throw new Exception("Teacher not found");
 
-            _classes.Add(newClass);
+            var journal = new Journal() { DateStart = DateTime.UtcNow, DateEnd = DateTime.UtcNow.AddYears(1) };
+            var newClass = new Class() { ClassroomTeacherId = teacher.Id, Name = command.Name, CurrentJournal = journal };
+
+           _classes.Add(newClass);
             _classes.SaveChanges();
 
-            return _mapper.Map<ClassesDTO>(newClass);
+            return _mapper.Map<ClassWithTeacherDto>(newClass);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public ClassesDTO GetClassById(int id)
+        public ClassWithStudentDto GetClassById(int id)
         {
-            var searchClass = _classes.GetOne(id);
+            var searchClass = _classes.GetOneWithObjects(id);
             if (searchClass is null)
                 return null;
 
-            return _mapper.Map<ClassesDTO>(searchClass);
+            searchClass.ClassroomTeacher = _teacherService.GetTeacherById(searchClass.ClassroomTeacherId);
+            searchClass.Headman = _studentService.GetStudentById(searchClass.HeadmanId);
+
+            searchClass.Students = searchClass.Students.Select(s => _studentService.GetStudentById(searchClass.Id)).ToList();
+
+            return _mapper.Map<ClassWithStudentDto>(searchClass);
         }
     }
 }

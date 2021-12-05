@@ -15,22 +15,32 @@ namespace ElectronicJournal.Data.Repositorie
 
         public IEnumerable<Teacher> GetAllWithObjects()
         {
-            throw new NotImplementedException();
+            var teacher = _context.Set<Teacher>().AsNoTracking()
+               .Include(a => a.Human)
+               .Include(a => a.CurrentClass)
+               .ToList();
+
+            return teacher;
         }
 
-        public Teacher GetOneWithObjects(int id)
+            public Teacher GetOneWithObjects(int id)
         {
-            throw new NotImplementedException();
+            var teacher = _context.Set<Teacher>().AsNoTracking().Where(t => t.Id == id)
+               .Include(a => a.Human)
+               .Include(a => a.CurrentClass)
+               .FirstOrDefault();
+
+            return teacher;
         }
 
         public Teacher GetOneWithObjects(Expression<Func<Teacher, bool>> @where)
         {
-            var student = _context.Set<Teacher>().AsNoTracking().Where(where)
+            var teacher = _context.Set<Teacher>().AsNoTracking().Where(where)
                 .Include(a => a.Human)
                 .Include(a => a.CurrentClass)
                 .FirstOrDefault();
 
-            return student;
+            return teacher;
         }
 
         public IEnumerable<Teacher> GetAllWithObjects(Expression<Func<Teacher, bool>> @where)

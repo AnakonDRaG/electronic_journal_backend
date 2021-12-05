@@ -2,13 +2,10 @@
 using ElectronicJournal.Domain;
 using ElectronicJournal.Services.StudentsService;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ElectronicJournal.Controllers
 {
@@ -41,7 +38,7 @@ namespace ElectronicJournal.Controllers
         public IEnumerable<Subject> GetSubjectForStudent()
         {
             var student = _studentService.GetStudentByUserId(UserId);
-            return _subjects.GetSome(s=> s.SubjectsInJournal.Any(sj => sj.Journal.Class.Id == student.ClassId));
+            return _subjects.GetSome(s => s.SubjectsInJournal.Any(sj => sj.Journal.Class.Id == student.ClassId));
         }
 
         [HttpGet]
@@ -56,6 +53,21 @@ namespace ElectronicJournal.Controllers
         [Route("getOne")]
         public Subject GetOne([FromQuery] string subjectName)
         {
+            return _subjects.GetOneOrDefault(s => s.Name == subjectName);
+        }
+
+        [HttpPost]
+        [Route("add")]
+        public Subject AddSubject([FromQuery] string subjectName)
+        {
+            var subject = new Subject()
+            {
+                Name = subjectName
+            };
+
+            _subjects.Add(subject);
+            _subjects.SaveChanges();
+
             return _subjects.GetOneOrDefault(s => s.Name == subjectName);
         }
     }

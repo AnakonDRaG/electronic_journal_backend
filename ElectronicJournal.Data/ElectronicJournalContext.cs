@@ -26,7 +26,13 @@ namespace ElectronicJournal.Data
         {
             modelBuilder.Entity<Class>()
             .HasOne(c => c.ClassroomTeacher)
-            .WithMany()
+            .WithOne(t => t.CurrentClass)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Class>()
+            .HasOne(c => c.Headman)
+            .WithOne()
+            .HasForeignKey<Class>(c => c.HeadmanId)
             .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Class>()

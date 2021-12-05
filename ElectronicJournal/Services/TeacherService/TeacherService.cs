@@ -9,8 +9,8 @@ namespace ElectronicJournal.Services.TeacherService
 {
     public class TeacherService : BaseHumanService, ITeacherService
     {
-        private readonly IRepository<Teacher> _repository;
-        public TeacherService(IRepository<Teacher> repository, IRepository<Human> humanRepository): base(humanRepository)
+        private readonly IFullRepository<Teacher> _repository;
+        public TeacherService(IFullRepository<Teacher> repository, IRepository<Human> humanRepository): base(humanRepository)
         {
             _repository = repository;
         }
@@ -33,6 +33,11 @@ namespace ElectronicJournal.Services.TeacherService
         public Teacher GetTeacherByUserId(int id)
         {
             return _repository.GetOneOrDefault(s => s.Human.UserId == id);
+        }
+
+        public Teacher GetTeacherById(int id)
+        {
+            return _repository.GetOneWithObjects(id);
         }
     }
 }

@@ -33,16 +33,20 @@ namespace ElectronicJournal
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DbContext, ElectronicJournalContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddTransient<IRepository<User>, BaseRepository<User>>();
             services.AddTransient<IRepository<Subject>, BaseRepository<Subject>>();
             services.AddTransient<IRepository<Student>, BaseRepository<Student>>();
             services.AddTransient<IRepository<Teacher>, BaseRepository<Teacher>>();
+            services.AddTransient<IRepository<Journal>, BaseRepository<Journal>>();
             services.AddTransient<IRepository<Human>, BaseRepository<Human>>();
             services.AddTransient<IRepository<Class>, BaseRepository<Class>>();
             services.AddTransient<IFullRepository<Human>, HumanRepository>();
             services.AddTransient<IFullRepository<Lesson>, LessonsRepository>();
             services.AddTransient<IFullRepository<Teacher>, TeacherRepository>();
             services.AddTransient<IFullRepository<Student>, StudentsRepository>();
+            services.AddTransient<IFullRepository<Class>, ClassRepository>();
+            services.AddTransient<IFullRepository<SubjectInJournal>, SubjectInJournalRepository>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ITeacherService, TeacherService>();
             services.AddTransient<IJwtService, JwtService>();
@@ -74,11 +78,10 @@ namespace ElectronicJournal
                         };
                     });
 
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                });
+          
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            });
 
             services.AddSwaggerGen(c =>
             {
