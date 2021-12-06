@@ -46,6 +46,7 @@ namespace ElectronicJournal
             services.AddTransient<IFullRepository<Teacher>, TeacherRepository>();
             services.AddTransient<IFullRepository<Student>, StudentsRepository>();
             services.AddTransient<IFullRepository<Class>, ClassRepository>();
+            services.AddTransient<IFullRepository<Subject>, SubjectsRepository>();
             services.AddTransient<IFullRepository<SubjectInJournal>, SubjectInJournalRepository>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ITeacherService, TeacherService>();

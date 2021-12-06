@@ -55,7 +55,8 @@ namespace ElectronicJournal.DTO
 
             CreateMap<SubjectInJournal, SubjectsInJournalsDTO>();
 
-            CreateMap<Subject, SubjectsDTO>();
+            CreateMap<Subject, SubjectsDTO>()
+                .ForMember(subjectDto => subjectDto.Name, option=> option.MapFrom(e => e.Name));
 
             CreateMap<Teacher, TeachersDTO>()
                 .ForMember(entityDto => entityDto.FirstName, opt => opt.MapFrom(e => e.Human.Name))

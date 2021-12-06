@@ -54,7 +54,7 @@ namespace ElectronicJournal.Controllers
         [HttpPost]
         //[Authorize]
         [Route("add/headman/toClass")]
-        public ClassesDTO AddToHadmenClass(AddStudentToClassDto command)
+        public ClassesDTO AddToHeadmenClass(AddStudentToClassDto command)
         {
             var student = _students.GetOne(command.StudentId);
             if (student is null)

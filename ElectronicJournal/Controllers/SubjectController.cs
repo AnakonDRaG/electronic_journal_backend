@@ -1,4 +1,5 @@
-﻿using ElectronicJournal.Data.Repositorie.Interfaces;
+﻿using System;
+using ElectronicJournal.Data.Repositorie.Interfaces;
 using ElectronicJournal.Domain;
 using ElectronicJournal.Services.StudentsService;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
+using ElectronicJournal.DTO.ModelsDTO;
 
 namespace ElectronicJournal.Controllers
 {
@@ -13,23 +16,26 @@ namespace ElectronicJournal.Controllers
     [ApiController]
     public class SubjectController : ControllerBase
     {
-        private IRepository<Subject> _subjects;
+        private IFullRepository<Subject> _subjects;
         private IRepository<User> _users;
         private readonly IStudentService _studentService;
+        private readonly IMapper _mapper;
 
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        public SubjectController(IRepository<Subject> subjects, IRepository<User> users, IStudentService studentService)
+        public SubjectController(IFullRepository<Subject> subjects, IRepository<User> users, IStudentService studentService, IMapper mapper)
         {
             _subjects = subjects;
             _users = users;
             _studentService = studentService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IEnumerable<Subject> GetAll()
+        public IEnumerable<SubjectsDTO> GetAll()
         {
-            return _subjects.GetAll();
+            var subjects = _subjects.GetAllWithObjects();
+            return subjects.Select(h => _mapper.Map<SubjectsDTO>(h));
         }
 
         [HttpGet]
@@ -57,18 +63,23 @@ namespace ElectronicJournal.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
-        public Subject AddSubject([FromQuery] string subjectName)
+        [Route("create")]
+        public IActionResult CreateSubject(CreateDto command)
         {
+            if (command.Name == null)
+            {
+                return BadRequest(new {message = "Subject name is null"});
+            }
+            
             var subject = new Subject()
             {
-                Name = subjectName
+                Name = command.Name
             };
 
             _subjects.Add(subject);
             _subjects.SaveChanges();
 
-            return _subjects.GetOneOrDefault(s => s.Name == subjectName);
+            return Ok(new {Message = "Subject was created"});
         }
     }
 }

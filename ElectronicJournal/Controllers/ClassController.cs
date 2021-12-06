@@ -23,7 +23,8 @@ namespace ElectronicJournal.Controllers
         private readonly IStudentService _studentService;
         private int UserId => int.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        public ClassController(IFullRepository<Class> classes, IMapper mapper, ITeacherService teacherService, IStudentService studentService)
+        public ClassController(IFullRepository<Class> classes, IMapper mapper, ITeacherService teacherService,
+            IStudentService studentService)
         {
             _classes = classes;
             _mapper = mapper;
@@ -38,7 +39,8 @@ namespace ElectronicJournal.Controllers
         {
             var human = _classes.GetAllWithObjects().ToList();
 
-            return human.Select(h => {
+            return human.Select(h =>
+            {
                 h.ClassroomTeacher = _teacherService.GetTeacherById(h.ClassroomTeacherId);
                 h.Headman = _studentService.GetStudentById(h.HeadmanId);
                 return _mapper.Map<ClassesDTO>(h);
@@ -54,10 +56,10 @@ namespace ElectronicJournal.Controllers
             if (teacher is null)
                 throw new Exception("Teacher not found");
 
-            var journal = new Journal() { DateStart = DateTime.UtcNow, DateEnd = DateTime.UtcNow.AddYears(1) };
-            var newClass = new Class() { ClassroomTeacherId = teacher.Id, Name = command.Name, CurrentJournal = journal };
+            var journal = new Journal() {DateStart = DateTime.UtcNow, DateEnd = DateTime.UtcNow.AddYears(1)};
+            var newClass = new Class() {ClassroomTeacherId = teacher.Id, Name = command.Name, CurrentJournal = journal};
 
-           _classes.Add(newClass);
+            _classes.Add(newClass);
             _classes.SaveChanges();
 
             return _mapper.Map<ClassWithTeacherDto>(newClass);
@@ -74,7 +76,8 @@ namespace ElectronicJournal.Controllers
             searchClass.ClassroomTeacher = _teacherService.GetTeacherById(searchClass.ClassroomTeacherId);
             searchClass.Headman = _studentService.GetStudentById(searchClass.HeadmanId);
 
-            searchClass.Students = searchClass.Students.Select(s => _studentService.GetStudentById(searchClass.Id)).ToList();
+            searchClass.Students = searchClass.Students.Select(s => _studentService.GetStudentById(searchClass.Id))
+                .ToList();
 
             return _mapper.Map<ClassWithStudentDto>(searchClass);
         }
